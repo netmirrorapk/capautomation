@@ -1,0 +1,62 @@
+# Builds the one-click installers on GitLab CI.
+#   • Windows (.exe / NSIS) → runs on GitLab's free SaaS Windows runner.
+#   • macOS  (.dmg)         → manual; needs a macOS runner (paid SaaS tier or
+#                             your own registered runner). Won't block the pipeline.
+#
+# Trigger a build: GitLab → Build → Pipelines → "Run pipeline", or push a tag (v1.0.0).
+# Download results: the finished job → "Browse"/download artifacts (kept 30 days).
+
+stages:
+  - build
+
+variables:
+  # No code-signing certificate — produce unsigned installers.
+  CSC_IDENTITY_AUTO_DISCOVERY: "false"
+
+# ── Windows one-click installer ─────────────────────────────────────────────
+build:windows:
+  stage: build
+  tags:
+    - saas-windows-medium-amd64
+  before_script:
+    # Node isn't preinstalled on the Windows runner image; add it via Chocolatey.
+    - if (-not (Get-Command node -ErrorAction SilentlyContinue)) { choco install nodejs-lts -y --no-progress }
+    - $env:Path = "C:\Program Files\nodejs;" + $env:Path
+    - node --version
+    - npm --version
+  script:
+    - npm install
+    - npm run dist:win
+  artifacts:
+    name: "capcut-subtitle-editor-windows"
+    paths:
+      - dist/*.exe
+    expire_in: 30 days
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "web"      # manual "Run pipeline" from the UI
+    - if: $CI_COMMIT_TAG                      # any tag push (e.g. v1.0.0)
+
+# ── macOS installer (.dmg) ──────────────────────────────────────────────────
+# Manual + allow_failure so the pipeline is green even without a macOS runner.
+build:macos:
+  stage: build
+  tags:
+    - saas-macos-medium-m1
+  before_script:
+    - node --version || brew install node
+    - npm --version
+  script:
+    - npm install
+    - npm run dist:mac
+  artifacts:
+    name: "capcut-subtitle-editor-macos"
+    paths:
+      - dist/*.dmg
+    expire_in: 30 days
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "web"
+      when: manual
+      allow_failure: true
+    - if: $CI_COMMIT_TAG
+      when: manual
+      allow_failure: true
