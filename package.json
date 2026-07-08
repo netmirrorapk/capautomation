@@ -1,0 +1,74 @@
+{
+  "name": "capcut-subtitle-editor",
+  "version": "1.0.0",
+  "description": "Desktop app for extracting and editing CapCut subtitle text.",
+  "main": "main.js",
+  "author": "Genspark",
+  "license": "MIT",
+  "private": true,
+  "engines": {
+    "node": ">=18.17.0"
+  },
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "dist:mac": "electron-builder --mac",
+    "dist:win": "electron-builder --win"
+  },
+  "devDependencies": {
+    "electron": "^31.7.7",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.local.capcutsubtitleeditor",
+    "productName": "CapCut Subtitle Editor",
+    "asar": true,
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "renderer.js",
+      "styles.css",
+      "src/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "category": "public.app-category.video",
+      "identity": null
+    },
+    "dmg": {
+      "title": "${productName}",
+      "contents": [
+        { "x": 130, "y": 220 },
+        { "x": 410, "y": 220, "type": "link", "path": "/Applications" }
+      ]
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "CapCut Subtitle Editor"
+    }
+  }
+}

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CapCut Subtitle Editor — by Shaniyal Malik</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Projects</p>
+            <h1>CapCut Subtitle Editor</h1>
+            <p class="brand-byline">by Shaniyal Malik</p>
+          </div>
+          <button id="refreshProjectsBtn" class="secondary-btn">Refresh Projects</button>
+        </div>
+
+        <div class="project-meta">
+          <span id="projectCount">0 projects</span>
+          <span id="scanInfo">Scanning default CapCut locations</span>
+        </div>
+
+        <div id="projectList" class="project-list"></div>
+
+        <div class="sidebar-footer">
+          <span class="sidebar-footer-brand">✦ Shaniyal Malik</span>
+        </div>
+      </aside>
+
+      <main class="main-panel">
+        <section class="toolbar">
+          <div class="selection-summary">
+            <p class="eyebrow">Selected Project</p>
+            <h2 id="selectedProjectName">None selected</h2>
+            <p id="selectedProjectPath" class="muted">Choose a project from the left panel.</p>
+          </div>
+
+          <div class="button-row">
+            <button id="extractCaptionsBtn" class="primary-btn" disabled>Extract Captions</button>
+            <button id="applyChangesBtn" class="primary-btn success" disabled>Apply Changes</button>
+            <button id="backupProjectBtn" class="secondary-btn" disabled>Backup Project</button>
+            <button id="restoreBackupBtn" class="secondary-btn danger" disabled>Restore Backup</button>
+          </div>
+        </section>
+
+        <section class="feature-bar">
+          <div class="feature-group">
+            <p class="eyebrow">Motion</p>
+            <div class="feature-controls">
+              <select id="animationPreset" class="select-input" disabled></select>
+              <button id="applyAnimationBtn" class="primary-btn" disabled>Apply to All Clips</button>
+            </div>
+            <p class="feature-hint">Adds a Ken Burns keyframe animation to every image and video clip.</p>
+          </div>
+
+          <div class="feature-group">
+            <p class="eyebrow">Subtitles</p>
+            <div class="feature-controls">
+              <button id="exportSrtBtn" class="secondary-btn" disabled>&#8595; Export .srt</button>
+            </div>
+            <p class="feature-hint">Exports CapCut's subtitle track as a timestamped .srt file.</p>
+          </div>
+
+        </section>
+
+        <section class="editor-panel">
+          <div class="editor-header">
+            <div>
+              <p class="eyebrow">Editable Caption Text</p>
+              <h3>One caption per line, same order as CapCut</h3>
+            </div>
+            <div class="editor-actions">
+              <div class="editor-stats">
+                <span id="captionCount">0 captions</span>
+                <span id="backupStatus">No backup action yet</span>
+              </div>
+              <div class="editor-file-btns">
+                <button id="downloadTxtBtn" class="secondary-btn small-btn" disabled>&#8595; Download .txt</button>
+                <label id="uploadTxtLabel" class="secondary-btn small-btn upload-label disabled-label">
+                  &#8593; Upload .txt
+                  <input type="file" id="uploadTxtInput" accept=".txt,text/plain" style="display:none" />
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <textarea
+            id="captionEditor"
+            spellcheck="false"
+            placeholder="Select a CapCut project, then click Extract Captions..."
+          ></textarea>
+        </section>
+
+        <section class="sync-panel">
+          <div class="editor-header">
+            <div>
+              <p class="eyebrow">Image Sync with Subtitle</p>
+              <h3>One subtitle block = one clip duration</h3>
+            </div>
+            <div class="editor-actions">
+              <div class="editor-file-btns">
+                <label id="syncUploadLabel" class="secondary-btn small-btn upload-label disabled-label">
+                  &#8593; Upload .srt
+                  <input type="file" id="syncUploadInput" accept=".srt,text/plain" style="display:none" />
+                </label>
+                <button id="applyImageSyncBtn" class="primary-btn success small-btn" disabled>Apply Image Sync</button>
+              </div>
+            </div>
+          </div>
+
+          <p class="feature-hint sync-hint">
+            Independent of CapCut's own subtitles. Paste SRT-format text (with timestamps) or upload a
+            <code>.srt</code> file — each block retimes the matching image/clip. Your CapCut subtitle track is not touched.
+          </p>
+
+          <textarea
+            id="syncEditor"
+            spellcheck="false"
+            placeholder="1&#10;00:00:00,000 --> 00:00:02,500&#10;First block&#10;&#10;2&#10;00:00:02,500 --> 00:00:05,000&#10;Second block"
+          ></textarea>
+        </section>
+
+        <div class="status-footer">
+          <section id="statusBar" class="status-bar info">Ready.</section>
+          <span class="status-brand">by Shaniyal Malik</span>
+        </div>
+      </main>
+    </div>
+
+    <script src="renderer.js"></script>
+  </body>
+</html>
