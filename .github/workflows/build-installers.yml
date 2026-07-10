@@ -19,7 +19,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build macOS installer
-        run: npm run dist:mac
+        run: npm run dist:mac -- --publish never
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: false
       - name: Upload .dmg
@@ -40,7 +40,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build Windows installer
-        run: npm run dist:win
+        run: npm run dist:win -- --publish never
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: false
       - name: Upload .exe
